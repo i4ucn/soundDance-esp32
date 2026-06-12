@@ -40,15 +40,6 @@
 | SD | GPIO4 | I2S data |
 | L/R | GND | 选择左声道 |
 
-如果你的开发板排针上没有 GPIO5/6/4，就选择你板子上真实能看到的普通 GPIO，然后改代码顶部这三行：
-
-```cpp
-constexpr uint8_t I2S_BCLK_PIN = 5;
-constexpr uint8_t I2S_WS_PIN = 6;
-constexpr uint8_t I2S_DIN_PIN = 4;
-```
-
-不要优先选择这些引脚：`GPIO0`、`GPIO19`、`GPIO20`、`GPIO43`、`GPIO44`。它们常常和启动、USB、串口有关，新手阶段先避开。
 
 ## 从零开始
 
