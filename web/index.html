@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>iot101 声音实验台教程</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f9fb;
+      --surface: #ffffff;
+      --surface-2: #eef5f4;
+      --ink: #182026;
+      --muted: #5d6b73;
+      --line: #d9e1e6;
+      --line-strong: #bdccd4;
+      --teal: #137f75;
+      --teal-dark: #0a5f58;
+      --gold: #c97d13;
+      --red: #b84545;
+      --blue: #376fb2;
+      --code: #101820;
+      --shadow: 0 18px 50px rgba(35, 52, 64, .12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(19, 127, 117, .09), rgba(247, 249, 251, 0) 360px),
+        var(--bg);
+      color: var(--ink);
+      font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    a {
+      color: var(--teal-dark);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    a:hover {
+      color: var(--blue);
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 5;
+      transform: translateY(-160%);
+      background: var(--ink);
+      color: white;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .page {
+      width: min(1180px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .masthead {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+      gap: 28px;
+      align-items: center;
+      min-height: 360px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--teal-dark);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(34px, 7vw, 66px);
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 20px);
+    }
+
+    .quick-start {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .72);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .pill svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+      color: var(--teal);
+    }
+
+    .hero-visual {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .86);
+      box-shadow: 0 12px 32px rgba(35, 52, 64, .08);
+      overflow: hidden;
+    }
+
+    .toc header {
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .toc h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .toc p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .toc nav {
+      display: grid;
+      padding: 8px;
+    }
+
+    .toc a {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      min-height: 42px;
+      padding: 6px 8px;
+      border-radius: var(--radius);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .toc a:hover,
+    .toc a.active {
+      background: var(--surface-2);
+      color: var(--teal-dark);
+    }
+
+    .toc b {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #e2efed;
+      color: var(--teal-dark);
+      font-size: 13px;
+    }
+
+    .toc .trouble b {
+      background: #f6e7e7;
+      color: var(--red);
+    }
+
+    .toc .next b {
+      background: #f5ecd9;
+      color: var(--gold);
+    }
+
+    main {
+      display: grid;
+      gap: 18px;
+    }
+
+    button {
+      min-height: 38px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 7px 12px;
+    }
+
+    button:hover {
+      border-color: var(--teal);
+      color: var(--teal-dark);
+    }
+
+    .step {
+      scroll-margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 10px 30px rgba(35, 52, 64, .06);
+      overflow: hidden;
+    }
+
+    .step > header {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(19, 127, 117, .08), rgba(55, 111, 178, .05));
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: white;
+      font-weight: 800;
+    }
+
+    .step h2 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 30px);
+    }
+
+    .step header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .done-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .done-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--teal);
+    }
+
+    .content {
+      padding: 20px 22px 24px;
+      overflow-x: auto;
+    }
+
+    .content > :first-child {
+      margin-top: 0;
+    }
+
+    .content > :last-child {
+      margin-bottom: 0;
+    }
+
+    .content-image {
+      margin: 14px 0 22px;
+    }
+
+    .content-image img {
+      display: block;
+      width: min(100%, 760px);
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    h3 {
+      margin: 28px 0 8px;
+      font-size: 20px;
+    }
+
+    p,
+    ul,
+    ol {
+      margin-top: 0;
+      margin-bottom: 14px;
+    }
+
+    li + li {
+      margin-top: 4px;
+    }
+
+    .callout {
+      margin: 18px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--teal);
+      border-radius: var(--radius);
+      background: var(--surface-2);
+    }
+
+    .warning {
+      border-left-color: var(--red);
+      background: #fbf0f0;
+    }
+
+    .success {
+      border-left-color: var(--teal);
+      background: #eaf6f4;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eef3f6;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    code {
+      border-radius: 5px;
+      background: #edf2f5;
+      color: #0f4f73;
+      padding: .08em .35em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: .92em;
+    }
+
+    pre {
+      position: relative;
+      margin: 14px 0 18px;
+      border-radius: var(--radius);
+      background: var(--code);
+      color: #edf6f8;
+      overflow: auto;
+    }
+
+    pre code {
+      display: block;
+      min-width: max-content;
+      padding: 16px;
+      background: transparent;
+      color: inherit;
+      line-height: 1.55;
+    }
+
+    .copy-code {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      min-height: 30px;
+      border-color: rgba(255, 255, 255, .22);
+      background: rgba(255, 255, 255, .08);
+      color: white;
+      font-size: 12px;
+      padding: 4px 8px;
+    }
+
+    .copy-code:hover {
+      border-color: rgba(255, 255, 255, .45);
+      color: white;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfd;
+      padding: 14px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .footer {
+      margin-top: 28px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--muted);
+    }
+
+    @media (max-width: 960px) {
+      .masthead,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .masthead {
+        min-height: 0;
+      }
+
+      .toc {
+        position: static;
+      }
+
+      .toc nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 660px) {
+      body {
+        font-size: 15px;
+      }
+
+      .page {
+        width: min(100vw - 20px, 1180px);
+        padding-top: 18px;
+      }
+
+      .quick-start {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .step > header {
+        grid-template-columns: 1fr;
+      }
+
+      .step-number {
+        width: 38px;
+        height: 38px;
+      }
+
+      .done-check {
+        white-space: normal;
+      }
+
+      .content {
+        padding: 16px;
+      }
+
+      .toc nav,
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      th,
+      td {
+        padding: 9px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">跳到正文</a>
+
+  <div class="page">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">iot101 / ESP32-S3 + INMP441</p>
+        <h1>声音波形可视化<br>入门教程</h1>
+        <p class="lead">从购买硬件、认识零件、接线、Arduino 设置，到打开 ESP32 网页仪表盘。按左侧目录一步一步做，先点亮串口测试，再进入实时声音可视化。</p>
+        <div class="quick-start" aria-label="项目速览">
+          <span class="pill">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12h4l2-7 4 14 2-7h4"/></svg>
+            波形
+          </span>
+          <span class="pill">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 18V8m5 10V4m5 14v-7m5 7V6"/></svg>
+            频谱
+          </span>
+          <span class="pill">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m6-14a4 4 0 0 1 0 10M6 7a4 4 0 0 0 0 10"/></svg>
+            估算分贝
+          </span>
+        </div>
+      </div>
+
+      <figure class="hero-visual">
+        <img
+          src="images/Premium_promotional_poster_for_ESP32-S3_sound_visu-1781274578230.png"
+          alt="ESP32-S3 声音可视化项目宣传海报"
+        >
+      </figure>
+    </header>
+
+    <div class="layout">
+      <aside class="toc" aria-label="教程目录">
+        <header>
+          <h2>目录</h2>
+          <p><span id="progressText">0 / 8</span> 个步骤已完成</p>
+        </header>
+        <nav>
+          <a href="#step-1"><b>1</b><span>购买硬件</span></a>
+          <a href="#step-2"><b>2</b><span>认识零件</span></a>
+          <a href="#step-3"><b>3</b><span>接线</span></a>
+          <a href="#step-4"><b>4</b><span>Arduino IDE 设置</span></a>
+          <a href="#step-5"><b>5</b><span>串口测试</span></a>
+          <a href="#step-6"><b>6</b><span>打开网页</span></a>
+          <a class="trouble" href="#troubleshooting"><b>!</b><span>排障指南</span></a>
+          <a class="next" href="#next-projects"><b>+</b><span>下一步项目</span></a>
+        </nav>
+      </aside>
+
+      <main id="content">
+        <article class="step" id="step-1">
+          <header>
+            <span class="step-number">1</span>
+            <div>
+              <h2>第 1 步：购买硬件</h2>
+              <p>先把三样基础硬件准备好，后面的接线和测试会顺很多。</p>
+            </div>
+            <label class="done-check"><input type="checkbox" data-step="1"> 完成</label>
+          </header>
+          <div class="content">
+            <h3>购物清单</h3>
+            <table>
+              <thead>
+                <tr><th>硬件</th><th>规格</th><th>参考价格</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>单片机</td><td>ESP32-S3</td><td>淘宝约 60 元</td></tr>
+                <tr><td>数字麦克风</td><td>INMP441</td><td>淘宝约 6.5 元</td></tr>
+                <tr><td>面包板</td><td>普通实验面包板</td><td>淘宝约 13.6 元</td></tr>
+              </tbody>
+            </table>
+
+            <div class="callout">
+              <strong>下单前确认：</strong>ESP32-S3 开发板要带 USB 接口，INMP441 请选择数字 I2S 麦克风模块。面包板用来免焊接线，适合先做实验。
+            </div>
+          </div>
+        </article>
+
+        <article class="step" id="step-2">
+          <header>
+            <span class="step-number">2</span>
+            <div>
+              <h2>第 2 步：认识零件</h2>
+              <p>先知道 ESP32-S3、INMP441 和面包板各自负责什么。</p>
+            </div>
+            <label class="done-check"><input type="checkbox" data-step="2"> 完成</label>
+          </header>
+          <div class="content">
+            <h3>ESP32-S3 是什么</h3>
+            <p>ESP32-S3 可以理解成一台很小的电脑。它能读传感器、连 WiFi、开网页，还能把数据发给浏览器。</p>
+            <p>在这个项目里，ESP32-S3 负责三件事：</p>
+            <ol>
+              <li>给 INMP441 提供 I2S 时钟。</li>
+              <li>读取麦克风传来的数字声音。</li>
+              <li>把声音数据通过 WiFi 发给浏览器。</li>
+            </ol>
+
+            <h3>INMP441 是什么</h3>
+            <p>INMP441 是 I2S 数字麦克风。它和很多普通“声音传感器模块”不一样：</p>
+            <ul>
+              <li>普通模拟麦克风输出电压变化。</li>
+              <li>INMP441 直接输出数字音频数据。</li>
+            </ul>
+            <h3>INMP441 引脚</h3>
+            <table>
+              <thead>
+                <tr><th>引脚</th><th>作用</th><th>接哪里</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>VDD</td><td>电源</td><td>ESP32 的 3V3</td></tr>
+                <tr><td>GND</td><td>地</td><td>ESP32 的 GND</td></tr>
+                <tr><td>SCK</td><td>I2S 时钟</td><td>一个普通 GPIO</td></tr>
+                <tr><td>WS</td><td>左右声道时钟</td><td>一个普通 GPIO</td></tr>
+                <tr><td>SD</td><td>音频数据输出</td><td>一个普通 GPIO</td></tr>
+                <tr><td>L/R</td><td>左右声道选择</td><td>先接 GND</td></tr>
+              </tbody>
+            </table>
+
+            <h3>面包板是什么</h3>
+            <p>面包板是一块不用焊接的实验板。你可以把 ESP32-S3、INMP441 和杜邦线插在上面，方便反复调整接线。</p>
+            <p>使用时注意同一排小孔通常是连在一起的，但中间凹槽两边默认不连通。接线前先看清楚行列方向，能少很多排查时间。</p>
+            <figure class="content-image">
+              <img src="images/面包板.png" alt="面包板">
+            </figure>
+
+            <div class="callout">
+              <strong>小朋友可以这样理解：</strong>声音像水波一样在空气里传。麦克风像小耳朵，把空气里的波变成数字。ESP32 像小邮差，把这些数字送到浏览器。浏览器像画板，把数字画成波形。
+            </div>
+          </div>
+        </article>
+
+        <article class="step" id="step-3">
+          <header>
+            <span class="step-number">3</span>
+            <div>
+              <h2>第 3 步：接线</h2>
+              <p>接线前先断电，默认使用 GPIO5、GPIO6、GPIO4。</p>
+            </div>
+            <label class="done-check"><input type="checkbox" data-step="3"> 完成</label>
+          </header>
+          <div class="content">
+            <div class="callout warning">
+              <strong>先断电：</strong>接线前先把 ESP32-S3 从 USB 拔下来。接完线、检查一遍，再插 USB。
+            </div>
+
+            <h3>默认接线</h3>
+            <table>
+              <thead>
+                <tr><th>INMP441</th><th>ESP32-S3</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>VDD</td><td>3V3</td></tr>
+                <tr><td>GND</td><td>GND</td></tr>
+                <tr><td>SCK</td><td>GPIO5</td></tr>
+                <tr><td>WS</td><td>GPIO6</td></tr>
+                <tr><td>SD</td><td>GPIO4</td></tr>
+                <tr><td>L/R</td><td>GND</td></tr>
+              </tbody>
+            </table>
+
+            <figure class="content-image">
+              <img src="images/ESP32 引脚布局.png" alt="ESP32 引脚布局">
+            </figure>
+            <figure class="content-image">
+              <img src="images/final.jpg" alt="最终的样子样式">
+            </figure>
+
+            <h3>检查清单</h3>
+            <ul>
+              <li>VDD 接的是 3V3，不是 5V。</li>
+              <li>INMP441 的 GND 和 ESP32 的 GND 已经相连。</li>
+              <li>SCK、WS、SD 三根线没有插错行。</li>
+              <li>面包板中间断开的两边不要误以为连通。</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="step" id="step-4">
+          <header>
+            <span class="step-number">4</span>
+            <div>
+              <h2>第 4 步：Arduino IDE 设置</h2>
+              <p>选择 ESP32-S3 开发板，并打开串口监视器。</p>
+            </div>
+            <label class="done-check"><input type="checkbox" data-step="4"> 完成</label>
+          </header>
+          <div class="content">
+            <h3>开发板</h3>
+            <p>在 Arduino IDE 里选择：</p>
+            <ul>
+              <li><code>ESP32S3 Dev Module</code></li>
+            </ul>
+            <p>如果你的 Arduino IDE 里有更准确的 Waveshare ESP32-S3 选项，也可以选对应选项。拿不准时，先用 <code>ESP32S3 Dev Module</code>。</p>
+
+            <h3>推荐工具设置</h3>
+            <table>
+              <thead>
+                <tr><th>选项</th><th>推荐值</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>USB CDC On Boot</td><td>Enabled</td></tr>
+                <tr><td>Flash Size</td><td>8MB</td></tr>
+                <tr><td>PSRAM</td><td>OPI PSRAM 或 Enabled</td></tr>
+                <tr><td>Upload Speed</td><td>460800 或 921600</td></tr>
+                <tr><td>Port</td><td>选择插入 ESP32 后出现的端口</td></tr>
+              </tbody>
+            </table>
+            <p>如果上传不稳定，把 Upload Speed 降到 <code>460800</code>。</p>
+
+            <h3>串口监视器</h3>
+            <p>打开串口监视器，波特率选择：</p>
+            <pre><code>115200</code></pre>
+            <p>你会看到 ESP32 打印出来的启动信息、WiFi 地址、WebSocket 连接状态。</p>
+          </div>
+        </article>
+
+        <article class="step" id="step-5">
+          <header>
+            <span class="step-number">5</span>
+            <div>
+              <h2>第 5 步：先跑麦克风串口测试</h2>
+              <p>确认声音数据会变化，再进入网页步骤。</p>
+            </div>
+            <label class="done-check"><input type="checkbox" data-step="5"> 完成</label>
+          </header>
+          <div class="content">
+            <p>打开：</p>
+            <pre><code>arduino/01_mic_serial_test/01_mic_serial_test.ino</code></pre>
+            <p>上传后打开串口监视器，波特率 <code>115200</code>。</p>
+
+            <h3>成功现象</h3>
+            <p>你会看到类似：</p>
+            <pre><code>RMS: 0.0042  dBFS: -47.5
+RMS: 0.0188  dBFS: -34.5</code></pre>
+            <p>对着麦克风拍手、说话，<code>RMS</code> 应该变大，<code>dBFS</code> 应该变得没那么负。</p>
+
+            <h3>如果没变化</h3>
+            <p>先别进入网页步骤。请回去检查：</p>
+            <ul>
+              <li>VDD 是否接 3V3。</li>
+              <li>GND 是否接好。</li>
+              <li>SCK/WS/SD 是否和代码顶部一致。</li>
+              <li>L/R 是否接 GND。</li>
+              <li>你选择的 GPIO 是否真的在开发板排针上。</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="step" id="step-6">
+          <header>
+            <span class="step-number">6</span>
+            <div>
+              <h2>第 6 步：打开声音可视化网页</h2>
+              <p>串口测试通过后，上传网页仪表盘程序。</p>
+            </div>
+            <label class="done-check"><input type="checkbox" data-step="6"> 完成</label>
+          </header>
+          <div class="content">
+            <p>串口测试通过后，打开：</p>
+            <pre><code>arduino/02_sound_visualizer/02_sound_visualizer.ino</code></pre>
+            <p>上传后打开串口监视器。</p>
+
+            <h3>默认热点模式</h3>
+            <table>
+              <thead>
+                <tr><th>项目</th><th>值</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>WiFi 名称</td><td>ESP32-AudioLab</td></tr>
+                <tr><td>密码</td><td>12345678</td></tr>
+                <tr><td>浏览器地址</td><td>http://192.168.4.1</td></tr>
+              </tbody>
+            </table>
+            <p>Mac 连接这个 WiFi 后，浏览器打开 <code>http://192.168.4.1</code>。</p>
+
+            <h3>连接家里的 WiFi</h3>
+            <p>如果想让 ESP32 加入你家里的 WiFi，修改 <code>02_sound_visualizer.ino</code> 顶部：</p>
+            <pre><code>const char *WIFI_SSID = "你的WiFi名";
+const char *WIFI_PASSWORD = "你的WiFi密码";</code></pre>
+            <p>这时 ESP32 不会显示 <code>ESP32-AudioLab</code> 热点。它会在串口监视器里打印自己的 IP，比如：</p>
+            <pre><code>WiFi connected: http://192.168.1.23</code></pre>
+            <p>Mac 和 ESP32 必须在同一个 WiFi 下。</p>
+
+            <h3>网页上的指标</h3>
+            <table>
+              <thead>
+                <tr><th>指标</th><th>含义</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>估算声级</td><td>用 dBFS 加校准偏移得到的估算 dB SPL</td></tr>
+                <tr><td>数字满幅</td><td>dBFS，数字音频相对满幅的强度</td></tr>
+                <tr><td>RMS</td><td>一帧声音的平均能量</td></tr>
+                <tr><td>主峰</td><td>当前频谱里最明显的频率</td></tr>
+              </tbody>
+            </table>
+            <div class="callout success">
+              吹口哨时，主峰会比较稳定。拍手时，波形会突然变宽变高。
+            </div>
+          </div>
+        </article>
+
+        <article class="step" id="troubleshooting">
+          <header>
+            <span class="step-number">!</span>
+            <div>
+              <h2>排障指南</h2>
+              <p>如果 WiFi、上传、波形或分贝不符合预期，从这里开始查。</p>
+            </div>
+            <label class="done-check"><input type="checkbox" data-step="7"> 看过</label>
+          </header>
+          <div class="content">
+            <h3>Mac 看不到 ESP32-AudioLab</h3>
+            <p>先判断 ESP32 程序有没有真的跑起来。</p>
+            <ol>
+              <li>打开 Arduino IDE 串口监视器，波特率 <code>115200</code>。</li>
+              <li>按一下 ESP32 的 <code>RST</code> 或 <code>EN</code>。</li>
+              <li>看串口有没有打印：</li>
+            </ol>
+            <pre><code>AP mode: connect to ESP32-AudioLab then open http://192.168.4.1</code></pre>
+            <p>如果没有这行，Mac 看不到热点是正常的，因为热点根本还没有启动。</p>
+
+            <table>
+              <thead>
+                <tr><th>常见原因</th><th>处理</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>代码没有成功上传</td><td>重新点 Arduino IDE 的上传按钮</td></tr>
+                <tr><td>你填了家里 WiFi 名</td><td>ESP32 会连家里 WiFi，不会开 <code>ESP32-AudioLab</code></td></tr>
+                <tr><td>板子没正常启动</td><td>拔插 USB，按 RST/EN</td></tr>
+                <tr><td>选错端口或板型</td><td>选 <code>ESP32S3 Dev Module</code> 和正确端口</td></tr>
+                <tr><td>USB 线只能充电</td><td>换一根能传数据的 USB 线</td></tr>
+              </tbody>
+            </table>
+
+            <h3>README 写 GPIO5，但我板子没有 GPIO5</h3>
+            <p>这是开发板引脚暴露方式的问题。ESP32-S3 芯片通常有 GPIO5，但你的开发板排针不一定引出它，或者丝印不叫 <code>GPIO5</code>。</p>
+            <figure class="content-image">
+              <img src="images/ESP32 引脚布局.png" alt="ESP32 引脚布局">
+            </figure>
+
+            <h3>网页打开了但没有波形</h3>
+            <p>先回到 <code>01_mic_serial_test</code>。如果串口测试也没变化，就是麦克风/I2S/接线问题，不是网页问题。</p>
+            <p>如果串口测试有变化，但网页没波形：</p>
+            <ul>
+              <li>看网页右上角是否显示连接成功或 fps。</li>
+              <li>确认浏览器打开的是 ESP32 的地址。</li>
+              <li>按网页上的“重连”。</li>
+              <li>刷新页面。</li>
+            </ul>
+
+            <h3>波形一直很小</h3>
+            <p>先调网页里的 <code>显示增益</code>。如果仍然很小，改代码：</p>
+            <pre><code>constexpr uint8_t PCM_GAIN_SHIFT = 13;</code></pre>
+            <p>数字越小，波形越大。</p>
+
+            <h3>波形被削平</h3>
+            <p>这说明放大太多了。改成：</p>
+            <pre><code>constexpr uint8_t PCM_GAIN_SHIFT = 15;</code></pre>
+            <p>数字越大，波形越小。</p>
+
+            <h3>分贝看起来不准</h3>
+            <p>这是正常的。INMP441 不是校准过的专业声级计。</p>
+            <p>校准方法：</p>
+            <ol>
+              <li>用手机分贝 App 或声级计放在 INMP441 旁边。</li>
+              <li>看网页估算声级和参考值差多少。</li>
+              <li>调整网页里的 <code>dB 校准偏移</code>。</li>
+            </ol>
+            <p>例如参考值是 60 dB，网页显示 55 dB，就把偏移加 5。</p>
+          </div>
+        </article>
+
+        <article class="step" id="next-projects">
+          <header>
+            <span class="step-number">+</span>
+            <div>
+              <h2>下一步项目</h2>
+              <p>跑通以后，可以继续挑战这些小任务。</p>
+            </div>
+            <label class="done-check"><input type="checkbox" data-step="8"> 收藏</label>
+          </header>
+          <div class="content">
+            <div class="cards">
+              <section class="mini-card">
+                <h3>任务 1：夜间噪声日记</h3>
+                <p>每 10 秒记录一次估算分贝，第二天看一张曲线。可以记录时间、平均 dB、最大 dB、主峰频率。</p>
+              </section>
+              <section class="mini-card">
+                <h3>任务 2：工地噪声事件</h3>
+                <p>如果连续 5 秒超过 65 dB，就标记一次事件，并显示开始时间、持续时间、最大分贝。</p>
+              </section>
+              <section class="mini-card">
+                <h3>任务 3：鸟叫小侦探</h3>
+                <p>鸟叫通常有比较明显的高频成分。可以先观察 2 kHz 到 8 kHz 的频谱能量。</p>
+              </section>
+              <section class="mini-card">
+                <h3>任务 4：音乐可视化</h3>
+                <p>让低频控制红色，中频控制黄色，高频控制蓝绿色。也可以加 LED 灯带，但要先学习供电安全。</p>
+              </section>
+            </div>
+          </div>
+        </article>
+
+        <footer class="footer">
+          <strong>安全提醒：</strong>这个项目涉及 3.3V 低压电路，正常使用比较安全，但仍建议成人帮忙确认接线和 USB 供电。不要把 INMP441 接到 5V，也不要让裸露导线短接。
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "iot101-doc-progress-v2";
+    const checks = Array.from(document.querySelectorAll("[data-step]"));
+    const progressText = document.getElementById("progressText");
+    const navLinks = Array.from(document.querySelectorAll(".toc a"));
+    const sections = navLinks
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveProgress() {
+      const data = {};
+      checks.forEach((check) => {
+        data[check.dataset.step] = check.checked;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      updateProgressText();
+    }
+
+    function updateProgressText() {
+      const done = checks.filter((check) => check.checked).length;
+      progressText.textContent = done + " / " + checks.length;
+    }
+
+    async function copyText(text, button) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+
+      const original = button.textContent;
+      button.textContent = "已复制";
+      setTimeout(() => {
+        button.textContent = original;
+      }, 1200);
+    }
+
+    function copyCode(code, button) {
+      copyText(code, button).catch(() => {
+        const original = button.textContent;
+        button.textContent = "复制失败";
+        setTimeout(() => {
+          button.textContent = original;
+        }, 1200);
+      });
+    }
+
+    function initCodeCopy() {
+      document.querySelectorAll("pre").forEach((pre) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "copy-code";
+        button.textContent = "复制";
+        const code = pre.querySelector("code");
+        button.addEventListener("click", () => copyCode(code ? code.innerText.trim() : pre.innerText.trim(), button));
+        pre.appendChild(button);
+      });
+    }
+
+    function updateActiveLink() {
+      let current = sections[0];
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 110) current = section;
+      });
+      navLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === "#" + current.id);
+      });
+    }
+
+    const saved = loadProgress();
+    checks.forEach((check) => {
+      check.checked = Boolean(saved[check.dataset.step]);
+      check.addEventListener("change", saveProgress);
+    });
+    updateProgressText();
+    initCodeCopy();
+    updateActiveLink();
+
+    window.addEventListener("scroll", updateActiveLink, { passive: true });
+  </script>
+</body>
+</html>
