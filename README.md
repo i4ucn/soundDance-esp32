@@ -8,7 +8,7 @@
 - 说话时，波形会像山脉一样变化。
 - 晚上可以观察工地噪声的声级走势。
 - 早上可以试着捕捉鸟叫的高频特征。
-![项目截图](./images/example.png)
+![项目截图](./images/example.jpg)
 
 ## 新手小白从头搭建步骤
 https://i4ucn.github.io/soundDance-esp32/
