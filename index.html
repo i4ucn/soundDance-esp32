@@ -320,7 +320,67 @@
     }
 
     .content-image.is-half img {
-      width: min(50%, 760px);
+      width: min(80%, 760px);
+    }
+
+    .result-preview {
+      cursor: zoom-in;
+      position: relative;
+    }
+
+    .result-preview img {
+      width: 80%;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .result-preview::after {
+      content: '点击放大';
+      position: absolute;
+      bottom: 12px;
+      right: calc(20% + 12px);
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, .55);
+      color: #fff;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity .2s;
+      pointer-events: none;
+    }
+
+    .result-preview:hover::after {
+      opacity: 1;
+    }
+
+    .result-preview.zoomed {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      background: rgba(0, 0, 0, .85);
+      cursor: zoom-out;
+    }
+
+    .result-preview.zoomed img {
+      width: auto;
+      max-width: 95vw;
+      max-height: 92vh;
+      border: none;
+      border-radius: var(--radius);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+    }
+
+    .result-preview.zoomed::after {
+      content: '点击缩小';
+      inset: auto;
+      bottom: 16px;
+      right: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 1;
     }
 
     h3 {
@@ -854,6 +914,11 @@ const char *WIFI_PASSWORD = "你的WiFi密码";</code></pre>
             <div class="callout success">
               吹口哨时，主峰会比较稳定。拍手时，波形会突然变宽变高。
             </div>
+
+            <h3>最终效果</h3>
+            <figure class="content-image result-preview" onclick="this.classList.toggle('zoomed')">
+              <img src="images/final-soundDance.png" alt="声音可视化最终效果展示">
+            </figure>
           </div>
         </article>
 
