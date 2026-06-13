@@ -263,7 +263,7 @@
 
     .step > header {
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-columns: auto minmax(0, 1fr);
       gap: 14px;
       align-items: center;
       padding: 18px;
@@ -293,21 +293,6 @@
       line-height: 1.45;
     }
 
-    .done-check {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 14px;
-      white-space: nowrap;
-    }
-
-    .done-check input {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--teal);
-    }
-
     .content {
       padding: 20px 22px 24px;
       overflow-x: auto;
@@ -332,6 +317,10 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #fff;
+    }
+
+    .content-image.is-half img {
+      width: min(50%, 760px);
     }
 
     h3 {
@@ -393,6 +382,21 @@
 
     tr:last-child td {
       border-bottom: 0;
+    }
+
+    .hardware-photo {
+      display: inline-block;
+      line-height: 0;
+    }
+
+    .hardware-photo img {
+      display: block;
+      width: 96px;
+      height: 72px;
+      object-fit: contain;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
     }
 
     code {
@@ -515,10 +519,6 @@
         height: 38px;
       }
 
-      .done-check {
-        white-space: normal;
-      }
-
       .content {
         padding: 16px;
       }
@@ -543,7 +543,7 @@
       <div>
         <p class="eyebrow">iot101 / ESP32-S3 + INMP441</p>
         <h1>声音波形可视化<br>入门教程</h1>
-        <p class="lead">从购买硬件、认识零件、接线、Arduino 设置，到打开 ESP32 网页仪表盘。按左侧目录一步一步做，先点亮串口测试，再进入实时声音可视化。</p>
+        <p class="lead">面向新手小白的零基础指南，跟着步骤一步步做，就能轻松完成搭建，顺利点亮项目，点燃孩子对科技探索的兴趣。</p>
         <div class="quick-start" aria-label="项目速览">
           <span class="pill">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12h4l2-7 4 14 2-7h4"/></svg>
@@ -572,7 +572,6 @@
       <aside class="toc" aria-label="教程目录">
         <header>
           <h2>目录</h2>
-          <p><span id="progressText">0 / 8</span> 个步骤已完成</p>
         </header>
         <nav>
           <a href="#step-1"><b>1</b><span>购买硬件</span></a>
@@ -594,18 +593,32 @@
               <h2>第 1 步：购买硬件</h2>
               <p>先把三样基础硬件准备好，后面的接线和测试会顺很多。</p>
             </div>
-            <label class="done-check"><input type="checkbox" data-step="1"> 完成</label>
           </header>
           <div class="content">
             <h3>购物清单</h3>
             <table>
               <thead>
-                <tr><th>硬件</th><th>规格</th><th>参考价格</th></tr>
+                <tr><th>硬件</th><th>规格</th><th>参考价格</th><th>硬件图(点击放大)</th></tr>
               </thead>
               <tbody>
-                <tr><td>单片机</td><td>ESP32-S3</td><td>淘宝约 60 元</td></tr>
-                <tr><td>数字麦克风</td><td>INMP441</td><td>淘宝约 6.5 元</td></tr>
-                <tr><td>面包板</td><td>普通实验面包板</td><td>淘宝约 13.6 元</td></tr>
+                <tr>
+                  <td>单片机</td>
+                  <td>ESP32-S3</td>
+                  <td>淘宝约 60 元</td>
+                  <td><a class="hardware-photo" href="images/esp32-s3.png" target="_blank" rel="noopener" aria-label="点击放大查看 ESP32-S3 硬件图"><img src="images/esp32-s3.png" alt="ESP32-S3 硬件图"></a></td>
+                </tr>
+                <tr>
+                  <td>数字麦克风</td>
+                  <td>INMP441</td>
+                  <td>淘宝约 6.5 元</td>
+                  <td><a class="hardware-photo" href="images/INMP441.png" target="_blank" rel="noopener" aria-label="点击放大查看 INMP441 硬件图"><img src="images/INMP441.png" alt="INMP441 硬件图"></a></td>
+                </tr>
+                <tr>
+                  <td>面包板</td>
+                  <td>普通实验面包板</td>
+                  <td>淘宝约 13.6 元</td>
+                  <td><a class="hardware-photo" href="images/MB-102.png" target="_blank" rel="noopener" aria-label="点击放大查看 MB-102 面包板硬件图"><img src="images/MB-102.png" alt="MB-102 面包板硬件图"></a></td>
+                </tr>
               </tbody>
             </table>
 
@@ -622,7 +635,6 @@
               <h2>第 2 步：认识零件</h2>
               <p>先知道 ESP32-S3、INMP441 和面包板各自负责什么。</p>
             </div>
-            <label class="done-check"><input type="checkbox" data-step="2"> 完成</label>
           </header>
           <div class="content">
             <h3>ESP32-S3 是什么</h3>
@@ -633,6 +645,7 @@
               <li>读取麦克风传来的数字声音。</li>
               <li>把声音数据通过 WiFi 发给浏览器。</li>
             </ol>
+            <p>官方文档：<a href="https://docs.waveshare.net/ESP32-S3-DEV-KIT-N8R8/" target="_blank" rel="noopener">https://docs.waveshare.net/ESP32-S3-DEV-KIT-N8R8/</a></p>
 
             <h3>INMP441 是什么</h3>
             <p>INMP441 是 I2S 数字麦克风。它和很多普通“声音传感器模块”不一样：</p>
@@ -675,7 +688,6 @@
               <h2>第 3 步：接线</h2>
               <p>接线前先断电，默认使用 GPIO5、GPIO6、GPIO4。</p>
             </div>
-            <label class="done-check"><input type="checkbox" data-step="3"> 完成</label>
           </header>
           <div class="content">
             <div class="callout warning">
@@ -721,9 +733,13 @@
               <h2>第 4 步：Arduino IDE 设置</h2>
               <p>选择 ESP32-S3 开发板，并打开串口监视器。</p>
             </div>
-            <label class="done-check"><input type="checkbox" data-step="4"> 完成</label>
           </header>
           <div class="content">
+            <section>
+              <h3>IDE 安装</h3>
+              <p>下载地址：<a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">https://www.arduino.cc/en/software</a></p>
+            </section>
+
             <h3>开发板</h3>
             <p>在 Arduino IDE 里选择：</p>
             <ul>
@@ -760,10 +776,9 @@
               <h2>第 5 步：先跑麦克风串口测试</h2>
               <p>确认声音数据会变化，再进入网页步骤。</p>
             </div>
-            <label class="done-check"><input type="checkbox" data-step="5"> 完成</label>
           </header>
           <div class="content">
-            <p>打开：</p>
+            <p>用 Arduino IDE 打开：</p>
             <pre><code>arduino/01_mic_serial_test/01_mic_serial_test.ino</code></pre>
             <p>上传后打开串口监视器，波特率 <code>115200</code>。</p>
 
@@ -772,6 +787,11 @@
             <pre><code>RMS: 0.0042  dBFS: -47.5
 RMS: 0.0188  dBFS: -34.5</code></pre>
             <p>对着麦克风拍手、说话，<code>RMS</code> 应该变大，<code>dBFS</code> 应该变得没那么负。</p>
+            <figure class="content-image is-half">
+              <a href="images/ScreenShot.png" target="_blank" rel="noopener" aria-label="点击放大查看串口监视器声音数据截图">
+                <img src="images/ScreenShot.png" alt="串口监视器声音数据截图">
+              </a>
+            </figure>
 
             <h3>如果没变化</h3>
             <p>先别进入网页步骤。请回去检查：</p>
@@ -792,7 +812,6 @@ RMS: 0.0188  dBFS: -34.5</code></pre>
               <h2>第 6 步：打开声音可视化网页</h2>
               <p>串口测试通过后，上传网页仪表盘程序。</p>
             </div>
-            <label class="done-check"><input type="checkbox" data-step="6"> 完成</label>
           </header>
           <div class="content">
             <p>串口测试通过后，打开：</p>
@@ -845,7 +864,6 @@ const char *WIFI_PASSWORD = "你的WiFi密码";</code></pre>
               <h2>排障指南</h2>
               <p>如果 WiFi、上传、波形或分贝不符合预期，从这里开始查。</p>
             </div>
-            <label class="done-check"><input type="checkbox" data-step="7"> 看过</label>
           </header>
           <div class="content">
             <h3>Mac 看不到 ESP32-AudioLab</h3>
@@ -916,7 +934,6 @@ const char *WIFI_PASSWORD = "你的WiFi密码";</code></pre>
               <h2>下一步项目</h2>
               <p>跑通以后，可以继续挑战这些小任务。</p>
             </div>
-            <label class="done-check"><input type="checkbox" data-step="8"> 收藏</label>
           </header>
           <div class="content">
             <div class="cards">
@@ -948,35 +965,10 @@ const char *WIFI_PASSWORD = "你的WiFi密码";</code></pre>
   </div>
 
   <script>
-    const STORAGE_KEY = "iot101-doc-progress-v2";
-    const checks = Array.from(document.querySelectorAll("[data-step]"));
-    const progressText = document.getElementById("progressText");
     const navLinks = Array.from(document.querySelectorAll(".toc a"));
     const sections = navLinks
       .map((link) => document.querySelector(link.getAttribute("href")))
       .filter(Boolean);
-
-    function loadProgress() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-      } catch {
-        return {};
-      }
-    }
-
-    function saveProgress() {
-      const data = {};
-      checks.forEach((check) => {
-        data[check.dataset.step] = check.checked;
-      });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      updateProgressText();
-    }
-
-    function updateProgressText() {
-      const done = checks.filter((check) => check.checked).length;
-      progressText.textContent = done + " / " + checks.length;
-    }
 
     async function copyText(text, button) {
       if (navigator.clipboard && window.isSecureContext) {
@@ -1033,12 +1025,6 @@ const char *WIFI_PASSWORD = "你的WiFi密码";</code></pre>
       });
     }
 
-    const saved = loadProgress();
-    checks.forEach((check) => {
-      check.checked = Boolean(saved[check.dataset.step]);
-      check.addEventListener("change", saveProgress);
-    });
-    updateProgressText();
     initCodeCopy();
     updateActiveLink();
 

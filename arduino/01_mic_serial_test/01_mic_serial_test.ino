@@ -12,19 +12,34 @@ constexpr int8_t MIC_I2S_SLOT = I2S_STD_SLOT_LEFT;
 constexpr uint32_t SAMPLE_RATE = 16000;
 constexpr size_t SAMPLE_COUNT = 512;
 constexpr uint8_t PCM_GAIN_SHIFT = 14;
+constexpr uint32_t I2S_READ_TIMEOUT_MS = 100;
 
 I2SClass i2s;
 int32_t rawSamples[SAMPLE_COUNT];
+uint32_t lastNoSampleLogMs = 0;
 
 void setup() {
   Serial.begin(115200);
+  uint32_t waitStartMs = millis();
+  while (!Serial && millis() - waitStartMs < 3000) {
+    delay(10);
+  }
   delay(800);
 
   Serial.println();
   Serial.println("iot101 mic serial test");
   Serial.println("If RMS changes when you clap, the microphone is alive.");
+  Serial.print("Pins: SCK GPIO");
+  Serial.print(I2S_BCLK_PIN);
+  Serial.print(", WS GPIO");
+  Serial.print(I2S_WS_PIN);
+  Serial.print(", SD GPIO");
+  Serial.print(I2S_DIN_PIN);
+  Serial.print(", L/R slot ");
+  Serial.println(MIC_I2S_SLOT == I2S_STD_SLOT_LEFT ? "LEFT" : "RIGHT");
 
   i2s.setPins(I2S_BCLK_PIN, I2S_WS_PIN, -1, I2S_DIN_PIN);
+  i2s.setTimeout(I2S_READ_TIMEOUT_MS);
   bool ok = i2s.begin(
     I2S_MODE_STD,
     SAMPLE_RATE,
@@ -44,7 +59,13 @@ void setup() {
 void loop() {
   size_t bytesRead = i2s.readBytes(reinterpret_cast<char *>(rawSamples), sizeof(rawSamples));
   size_t samplesRead = bytesRead / sizeof(rawSamples[0]);
-  if (samplesRead == 0) return;
+  if (samplesRead == 0) {
+    if (millis() - lastNoSampleLogMs >= 1000) {
+      lastNoSampleLogMs = millis();
+      Serial.println("No I2S samples. Check VDD=3V3, GND, SCK=GPIO5, WS=GPIO6, SD=GPIO4, L/R=GND.");
+    }
+    return;
+  }
 
   int64_t sum = 0;
   for (size_t i = 0; i < samplesRead; i++) {
